@@ -1,19 +1,34 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 export default function CreacteStudent() {
-  const [name, setNeme] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [motherName, setMotherName] = useState("");
-  const [birthDate, setBirthDate] = useState("");
-  const [group, setGroup] = useState("");
+  const inicialValue = {
+    name: "",
+    lastName: "",
+    motherName: "",
+    birthDate: "",
+    group: "",
+  };
+  const [student, setStudent] = useState(inicialValue);
 
-  const handleSubmit = (e) => {
-    e.prevertDefault();
-    if ([name, lastName, motherName, birthDate, group].includes("")) {
-      console.log("esta vacio");
-    } else {
-      console.log("todo   sbien");
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setStudent({ ...student, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const postStudent = {
+      name: student.name,
+      lastName: student.lastName,
+      motherName: student.motherName,
+      birthDate: student.birthDate,
+      group: student.group,
+    };
+    await axios.post("http://localhost:4000/api/students", postStudent);
+
+    setStudent({ ...inicialValue });
   };
 
   return (
@@ -24,40 +39,40 @@ export default function CreacteStudent() {
           <input
             type="text"
             name="name"
-            value={name}
-            onChange={(e) => setNeme(e.target.value)}
+            value={student.name}
+            onChange={handleChange}
           ></input>
 
           <label>Last Name</label>
           <input
             type="text"
             name="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+            value={student.lastName}
+            onChange={handleChange}
           ></input>
 
           <label>Mother Name</label>
           <input
             type="text"
             name="motherName"
-            value={motherName}
-            onChange={(e) => setMotherName(e.target.value)}
+            value={student.motherName}
+            onChange={handleChange}
           ></input>
 
           <label>Birth Date </label>
           <input
             type="date"
             name="birthDate"
-            value={birthDate}
-            onChange={(e) => setBirthDate(e.target.value)}
+            value={student.birthDate}
+            onChange={handleChange}
           ></input>
 
           <label>Group</label>
           <input
             type="text"
             name="group"
-            value={group}
-            onChange={(e) => setGroup(e.target.value)}
+            value={student.group}
+            onChange={handleChange}
           ></input>
         </div>
 
